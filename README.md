@@ -7,6 +7,6 @@ Added a third sensor for reading the consumption of air conditioners and the pos
 
 The board's design also allows it to be inserted into the rail of the home's breaker box by printing a 3D component.
 
-![alt text](/images/pcbLayout.jpg)
+![alt text](/images/pcbLayout.png)
 
 ### The rest will come soon, in the meantime you can look at the old [version](https://github.com/zioCristia/esp-energy-monitor-v1) of this board.
