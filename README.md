@@ -9,4 +9,8 @@ The board's design also allows it to be inserted into the rail of the home's bre
 
 ![alt text](/images/pcbLayout.png)
 
+## Pcb
+![alt text](/images/finalPcbTop.jpg)
+![alt text](/images/finalPcbBot.jpg)
+
 ### The rest will come soon, in the meantime you can look at the old [version](https://github.com/zioCristia/esp-energy-monitor-v1) of this board.
