@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2022-07-20T17:32:37Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.6.2"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "lettore_corrente_v1"
+        },
+        "Owner": "Cristiano Bicchieri <s235117@studenti.polito.it>",
+        "Size": {
+            "X": 91.186,
+            "Y": 54.61
+        }
+    }
+}
