@@ -15,6 +15,7 @@ The board's design also allows it to be inserted into the rail of the home's bre
 * [Hardware](#hardware)
 * [Software](#software)
 * [Pcb](#pcb)
+* [Compatible shields](#compatible-shields)
 * [Contribution](#contribution)
 
 # General info
@@ -26,6 +27,8 @@ The board's design also allows it to be inserted into the rail of the home's bre
 # Pcb
 ![alt text](/images/circuitSchema.png)
 ![alt text](/images/pcbLayout.png)
+
+# Compatible shields
 
 # Contribution
 Feel free to report any bugs or feature requests.
