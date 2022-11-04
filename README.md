@@ -23,6 +23,7 @@ The board's design also allows it to be inserted into the rail of the home's bre
 # Hardware
 
 # Software
+You can see [here](https://github.com/zioCristia/esp-energy-monitor-v2/blob/main/energy_monitor.yaml.exemple) an example of the software uploaded on the board.
 
 # Pcb
 ![alt text](/images/circuitSchema.png)
