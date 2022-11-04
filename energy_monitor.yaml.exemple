@@ -1,0 +1,223 @@
+substitutions:
+# Interval of how often the power is updated
+  update_time: 2s
+
+esphome:
+  name: energy-monitor
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+sensor:
+  #Total House Amps 
+  - platform: ct_clamp
+    sensor: out_sensor
+    id: house_current
+    name: "House used current"
+    filters:
+      - calibrate_linear:
+          # Measured value of 0.004 maps to 0A
+          - 0.00348 -> 0
+          # Known load: 4.0A
+          # Value shown in logs: 0.1333A
+          - 0.1278 -> 6.08696
+      - lambda: |-
+          if (x > 0.2) return x;
+          else return 0;
+    update_interval: ${update_time}
+  - platform: adc
+    pin: 34
+    id: out_sensor
+    attenuation: auto
+  #Total House Watts
+  - platform: template
+    id: house_power
+    name: "House power"
+    lambda: return id(house_current).state * 230.0; #Power = Current * Voltage (so change 230 to whatever your mains voltage is)
+    unit_of_measurement: 'W'
+    icon: "mdi:flash-circle"
+    update_interval: ${update_time}
+  #House kWh
+  - platform: total_daily_energy
+    name: "House energy"
+    power_id: house_power
+    filters:
+      - multiply: 0.001
+    unit_of_measurement: kWh
+    
+  #Total Solar Amps 
+  - platform: ct_clamp
+    sensor: in_sensor
+    id: solar_current
+    name: "Solar current"
+    filters:
+      - calibrate_linear:
+          # Measured value of 0.004 maps to 0A
+          - 0.01 -> 0
+          # Known load: 4.0A
+          # Value shown in logs: 0.1333A
+          #- 0.2348 -> 13.783
+          - 0.2044 -> 14.783
+      - lambda: |-
+          if (x > 0.2) return x;
+          else return 0;
+    update_interval: ${update_time}
+  - platform: adc
+    pin: 35
+    id: in_sensor
+    attenuation: auto
+  #Total Solar Watts
+  - platform: template
+    id: solar_power
+    name: "Solar power"
+    lambda: return id(solar_current).state * 230.0; #Power = Current * Voltage (so change 230 to whatever your mains voltage is)
+    unit_of_measurement: 'W'
+    icon: "mdi:flash-circle"
+    update_interval: ${update_time}
+  #Solar kWh
+  - platform: total_daily_energy
+    name: "Solar Energy"
+    power_id: solar_power
+    filters:
+      - multiply: 0.001
+    unit_of_measurement: kWh
+  
+  #Total Air Conditioning Amps 
+  - platform: ct_clamp
+    sensor: ac_sensor
+    id: ac_current
+    name: "total ac current"
+    filters:
+      - calibrate_linear:
+          # Measured value of 0.004 maps to 0A
+          - 0.00348 -> 0
+          # Known load: 4.0A
+          # Value shown in logs: 0.1333A
+          - 0.1261 -> 6.08696
+      - lambda: |-
+          if (x > 0.2) return x;
+          else return 0;
+    update_interval: ${update_time}
+  - platform: adc
+    pin: 32
+    id: ac_sensor
+    attenuation: auto
+  #Total Air Conditioning Watts
+  - platform: template
+    id: ac_power
+    name: "total ac power"
+    lambda: return id(ac_current).state * 230.0; #Power = Current * Voltage (so change 230 to whatever your mains voltage is)
+    unit_of_measurement: 'W'
+    icon: "mdi:flash-circle"
+    update_interval: ${update_time}
+  #House kWh
+  - platform: total_daily_energy
+    name: "total ac energy"
+    power_id: ac_power
+    filters:
+      - multiply: 0.001
+    unit_of_measurement: kWh
+    
+  #Total diff Watts
+  - platform: template
+    id: diff_power
+    name: "Power difference"
+    lambda: return id(solar_power).state - id(house_power).state;
+    unit_of_measurement: 'W'
+    icon: "mdi:flash-circle"
+    update_interval: ${update_time}
+  #Difference kWh
+  - platform: total_daily_energy
+    name: "Energy difference"
+    power_id: diff_power
+    filters:
+      - multiply: 0.001
+    unit_of_measurement: kWh
+        
+  #Total house without air conditioning Watts
+  - platform: template
+    id: house_noAc_power
+    name: "House power without ac"
+    lambda: return id(house_power).state - id(ac_power).state;
+    unit_of_measurement: 'W'
+    icon: "mdi:flash-circle"
+    update_interval: ${update_time}
+    
+  #To grid Watts
+  - platform: template
+    id: toGrid_power
+    name: "To grid power"
+    lambda: !lambda |-
+      if (id(diff_power).state > 0) {
+        return id(diff_power).state;
+      } else {
+        return 0;
+      }
+    unit_of_measurement: 'W'
+    icon: "mdi:flash-circle"
+    update_interval: ${update_time}
+  #To grid kWh
+  - platform: total_daily_energy
+    name: "To grid energy"
+    power_id: toGrid_power
+    filters:
+      - multiply: 0.001
+    unit_of_measurement: kWh
+  #From grid Watts
+  - platform: template
+    id: fromGrid_power
+    name: "From grid power"
+    lambda: !lambda |-
+      if (id(diff_power).state < 0) {
+        return abs(id(diff_power).state);
+      } else {
+        return 0;
+      }
+    unit_of_measurement: 'W'
+    icon: "mdi:flash-circle"
+    update_interval: ${update_time}
+  #From grid kWh
+  - platform: total_daily_energy
+    name: "From grid energy"
+    power_id: fromGrid_power
+    filters:
+      - multiply: 0.001
+    unit_of_measurement: kWh
+    
+i2c:
+  sda: 21
+  scl: 22
+  
+display:
+  - platform: lcd_pcf8574
+    id: mydisplay
+    dimensions: 16x2
+    address: 0x27
+    lambda: |-
+      static bool bDisplay = true;
+      auto now = id(my_time).now(); // local time
+      if ((now.hour >= 23 || now.hour < 7) && bDisplay) {
+        id(mydisplay).no_backlight();;
+        bDisplay = false;
+      } else if ((now.hour >= 7 && now.hour < 23) && !bDisplay) {
+        id(mydisplay).backlight();;
+        bDisplay = true;
+      }
+      it.printf(0,0," IN %4.0fW", id(solar_power).state);
+      it.strftime(11, 0, "%H:%M", id(my_time).now());
+      it.printf(0,1,"OUT %4.0fW", id(house_power).state);
+      it.printf(10,1, "D%4.0fW", id(diff_power).state);
+      
+
+time:
+- platform: sntp
+  id: my_time
