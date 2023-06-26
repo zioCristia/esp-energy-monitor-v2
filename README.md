@@ -40,6 +40,7 @@ The module is composed of:
 * 10uF capacitor, x4
 * 75ohm resistor, x3 (not mandatory, depending on the CT sensor)
 
+A list with the main components and links could be found [here](https://docs.google.com/spreadsheets/d/1uGH7hN6ZSQ5MoKFjuWFCn1lEjyLJ1oxg2DWpdToigKc/edit#gid=1313427219).
 The burden resistor (75ohm) should be added depending on the CT sensor. In that case, to have the best readings, it should be changed based on the max current you are going to measure with the ct sensors, according to the following formula present in [openenergymonitor](https://docs.openenergymonitor.org/electricity-monitoring/ct-sensors/interface-with-arduino.html) page:
 
 ```
