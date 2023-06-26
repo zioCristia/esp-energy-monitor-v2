@@ -2,6 +2,8 @@
 Esp32 based module, 220V ac powered, energy monitor with three ct sensors (for solar power, home power and air conditioning power), and an LCD I2C display for visualization. Integrated with ESPhome in my IoT house based in Home Assistant.
 Any possibility of improvement is accepted.
 
+The board's design allows it to be inserted into the rail of the home's breaker box by printing a 3D component.
+
 ### Added features
 This is an update of the previous [version](https://github.com/zioCristia/esp-energy-monitor-v1) where I added a third sensor for reading the consumption of air conditioners and the possibility of adding additional boards for future ideas. A compatible board to add smart garden irrigation functionality is coming soon.
 
@@ -19,7 +21,9 @@ The board's design also allows it to be inserted into the rail of the home's bre
 * [Contribution](#contribution)
 
 # General info
-This is the second version of a simple energy monitor I built for my home. It has three ct sensors that control the current of the solar panels production, the house consumption and the air conditioning. These sensors are controlled by an esp32 board for connection via wi-fi to the home assistant thanks to the Esphome software. The board could be powered with a 220V ac, so no external transformer is needed, but for extensive use, especially when connected to some board extensions, it is recommended to use an external one and plug it directly into the 5V holes.
+This is the second version of a simple energy monitor I built for my home. It has three ct sensors that control the current of the solar panels production, the house consumption and the air conditioning. These sensors are controlled by an esp32 board for connection via wi-fi to the home assistant thanks to the Esphome software. 
+
+The board could be powered with a 220V ac, so no external transformer is needed, but for extensive use, especially when connected to some board extensions, it is recommended to use an external one and plug it directly into the 5V holes.
 
 I have also added a 16x2 lcd so that I can have an immediate output in my electrical service panel.
 
@@ -71,6 +75,8 @@ The lcd prints the solar power as IN, home power as OUT, the hour in the top rig
 The pcb layout is extremely simple with enough space for all the parts. The components are all through hole and the female jack connector is with 5 pins. Anyone can make this pcb at home with just a soldering iron.
 
 You can find the whole eagle project in [this folder](https://github.com/zioCristia/esp-energy-monitor-v2/tree/main/esp-energy-monitor-v2).
+
+The board's design allows it to be inserted into the rail of the home's breaker box by printing a 3D component.
 
 ![alt text](/images/circuitSchema.png)
 ![alt text](/images/pcbLayout.png)
